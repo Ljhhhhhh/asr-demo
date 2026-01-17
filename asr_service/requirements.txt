@@ -1,0 +1,5 @@
+fastapi>=0.110.0
+uvicorn>=0.29.0
+funasr>=1.0.5
+modelscope>=1.11.1
+python-dotenv>=1.0.0

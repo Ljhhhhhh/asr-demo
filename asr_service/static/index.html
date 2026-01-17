@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Local ASR Service</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="card">
+        <header class="header">
+          <h1>Local ASR Service</h1>
+          <p>
+            Upload a Chinese audio file to transcribe with timeline and speaker
+            diarization.
+          </p>
+        </header>
+        <form id="upload-form" class="form">
+          <label class="file-field" for="file-input">
+            <span class="file-label">Audio file</span>
+            <input
+              id="file-input"
+              name="file"
+              type="file"
+              accept=".wav,.mp3,.m4a,.flac,.aac,.ogg,.mp4"
+            />
+          </label>
+          <label class="text-field" for="hotwords-input">
+            <span class="text-label">热词（逗号分隔）</span>
+            <input
+              id="hotwords-input"
+              name="hotwords"
+              type="text"
+              placeholder="如：中建五局, 张总, 一利五率"
+            />
+          </label>
+          <label class="checkbox-field" for="postprocess-checkbox">
+            <input
+              id="postprocess-checkbox"
+              name="enable_postprocess"
+              type="checkbox"
+              checked
+            />
+            <span>启用后处理（语气词过滤、数字标准化）</span>
+          </label>
+          <div class="actions">
+            <button id="upload-button" type="submit">Transcribe</button>
+            <button id="copy-button" type="button" disabled>Copy text</button>
+          </div>
+        </form>
+        <div class="status" id="status">Idle. Choose a file to begin.</div>
+        <section class="result">
+          <h2>Transcript</h2>
+          <div id="transcript" class="transcript" aria-live="polite"></div>
+        </section>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
