@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Qwen3-ASR Result</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1 class="title">Qwen3-ASR Transcription Result</h1>
+    <div class="container">
+      <audio
+        id="audio-player"
+        class="audio-player"
+        controls
+        src="demo_5min.m4a"
+      ></audio>
+      <div id="transcript-container">Loading transcript...</div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('transcript-container');
+        const audioPlayer = document.getElementById('audio-player');
+
+        fetch('result.json')
+          .then((response) => response.json())
+          .then((data) => {
+            container.innerHTML = '';
+            // Data is an array of segments: [{text: "", timestamps: [...]}, ...]
+            // But Qwen3 timestamps output structure might vary.
+            // Based on our script: each item has "timestamps": [{"text": "x", "start": 0.0, "end": 0.1}, ...]
+
+            data.forEach((segment) => {
+              // We will display word-level timestamps if available
+              const segmentDiv = document.createElement('div');
+              segmentDiv.className = 'transcript-item';
+
+              // Use the start time of the first word as segment time
+              let startTime = 0;
+              if (segment.timestamps && segment.timestamps.length > 0) {
+                startTime = segment.timestamps[0].start;
+              }
+
+              const timeBadge = document.createElement('div');
+              timeBadge.className = 'time-badge';
+              timeBadge.textContent = formatTime(startTime);
+              timeBadge.onclick = () => {
+                audioPlayer.currentTime = startTime;
+                audioPlayer.play();
+              };
+
+              const textDiv = document.createElement('div');
+              textDiv.className = 'transcript-text';
+
+              if (segment.timestamps && segment.timestamps.length > 0) {
+                segment.timestamps.forEach((word) => {
+                  const wordSpan = document.createElement('span');
+                  wordSpan.textContent = word.text; // Note: Qwen might output characters for Chinese
+                  wordSpan.title = `${word.start}s - ${word.end}s`;
+                  wordSpan.onclick = () => {
+                    audioPlayer.currentTime = word.start;
+                    audioPlayer.play();
+                  };
+                  textDiv.appendChild(wordSpan);
+                });
+              } else {
+                textDiv.textContent = segment.text;
+              }
+
+              segmentDiv.appendChild(timeBadge);
+              segmentDiv.appendChild(textDiv);
+              container.appendChild(segmentDiv);
+            });
+          })
+          .catch((err) => {
+            container.textContent = 'Error loading result.json: ' + err;
+          });
+      });
+
+      function formatTime(seconds) {
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return `${m}:${s.toString().padStart(2, '0')}`;
+      }
+    </script>
+  </body>
+</html>
