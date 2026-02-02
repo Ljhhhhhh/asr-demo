@@ -135,7 +135,7 @@ form.addEventListener('submit', async (event) => {
   body.append('enable_postprocess', postprocessCheckbox.checked);
 
   try {
-    const response = await fetch('/api/transcribe', {
+    const response = await fetch('/asr/transcribe', {
       method: 'POST',
       body,
     });

@@ -1,0 +1,468 @@
+Starting ASR Service on port 8000...
+INFO:     Will watch for changes in these directories: ['/Users/pipilu/Documents/MaDun/GuoFu/asr-demo']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [85794] using WatchFiles
+INFO:     Started server process [85825]
+INFO:     Waiting for application startup.
+INFO:asr_service:Loading FunASR model: paraformer-zh (spk_model=cam++, enabled=True)
+INFO:root:download models from model hub: ms
+WARNING:root:trust_remote_code: False
+INFO:root:Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+INFO:root:ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+INFO:root:scope_map: ['module.', 'None']
+INFO:root:excludes: None
+INFO:root:Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt, status: <All keys matched successfully>
+INFO:root:Building VAD model.
+INFO:root:download models from model hub: ms
+WARNING:root:trust_remote_code: False
+INFO:root:Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+INFO:root:ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+INFO:root:scope_map: ['module.', 'None']
+INFO:root:excludes: None
+INFO:root:Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt, status: <All keys matched successfully>
+INFO:root:Building punc model.
+INFO:root:download models from model hub: ms
+WARNING:root:trust_remote_code: False
+Building prefix dict from the default dictionary ...
+DEBUG:jieba:Building prefix dict from the default dictionary ...
+Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+DEBUG:jieba:Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+Loading model cost 0.485 seconds.
+DEBUG:jieba:Loading model cost 0.485 seconds.
+Prefix dict has been built successfully.
+DEBUG:jieba:Prefix dict has been built successfully.
+INFO:root:Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+INFO:root:ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+INFO:root:scope_map: ['module.', 'None']
+INFO:root:excludes: None
+INFO:root:Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt, status: <All keys matched successfully>
+INFO:root:Building SPK model.
+INFO:root:download models from model hub: ms
+WARNING:root:trust_remote_code: False
+INFO:root:Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+INFO:root:ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+INFO:root:scope_map: ['module.', 'None']
+INFO:root:excludes: None
+INFO:root:Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin, status: <All keys matched successfully>
+INFO:asr_service:Model loaded
+INFO:     Application startup complete.
+funasr version: 1.3.0.
+Check update of funasr, and it would cost few times. You may disable it by set `disable_update=True` in AutoModel
+New version is available: 1.3.1.
+Please use the command "pip install -U funasr" to upgrade.
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common
+INFO:     127.0.0.1:63047 - "GET /health HTTP/1.1" 200 OK
+INFO:asr_service:Running ffmpeg conversion (denoise=True)
+INFO:asr_service:Starting ASR (hotwords=['测试', '语音识别'])
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s]100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.14it/s]{'load_data': '0.098', 'extract_feat': '0.757', 'forward': '0.875', 'batch_size': '1', 'rtf': '29.154'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.14it/s]rtf_avg: 29.154: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.14it/s]                                                                                          rtf_avg: 29.154: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.14it/s]
+  0%|[31m          [0m| 0/1 [00:00<?, ?it/s]
+  0%|[34m          [0m| 0/10 [00:00<?, ?it/s][AINFO:root:Attempting to parse hotwords as str...
+INFO:root:Hotword list: ['测试', '语音识别', '<s>'].
+
+100%|[34m██████████[0m| 10/10 [00:04<00:00,  2.09it/s][A
+{'load_data': '0.000', 'extract_feat': '0.058', 'forward': '4.781', 'batch_size': '10', 'rtf': '0.035'}, : 100%|[34m██████████[0m| 10/10 [00:04<00:00,  2.09it/s][A
+rtf_avg: 0.035: 100%|[34m██████████[0m| 10/10 [00:04<00:00,  2.09it/s]                                                                                           [Artf_avg: 0.035: 100%|[34m██████████[0m| 10/10 [00:04<00:00,  2.09it/s]
+
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 1/1 [00:00<00:00,  2.18it/s][A
+{'load_data': '0.000', 'extract_feat': '0.002', 'forward': '0.458', 'batch_size': '1', 'rtf': '0.305'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  2.18it/s][A
+rtf_avg: 0.305: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  2.18it/s]                                                                                          [Artf_avg: 0.305: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  2.18it/s]
+
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 1/1 [00:00<00:00,  8.99it/s][A
+{'load_data': '0.000', 'extract_feat': '0.002', 'forward': '0.111', 'batch_size': '1', 'rtf': '0.074'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  8.99it/s][A
+rtf_avg: 0.074: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  8.99it/s]                                                                                          [Artf_avg: 0.074: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  8.97it/s]
+
+  0%|[34m          [0m| 0/2 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 2/2 [00:00<00:00,  4.79it/s][A
+{'load_data': '0.000', 'extract_feat': '0.004', 'forward': '0.418', 'batch_size': '1', 'rtf': '0.139'}, : 100%|[34m██████████[0m| 2/2 [00:00<00:00,  4.79it/s][A
+rtf_avg: 0.139: 100%|[34m██████████[0m| 2/2 [00:00<00:00,  4.79it/s]                                                                                          [Artf_avg: 0.139: 100%|[34m██████████[0m| 2/2 [00:00<00:00,  4.78it/s]
+
+  0%|[34m          [0m| 0/9 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 9/9 [00:00<00:00, 20.16it/s][A
+{'load_data': '0.000', 'extract_feat': '0.008', 'forward': '0.446', 'batch_size': '1', 'rtf': '0.033'}, : 100%|[34m██████████[0m| 9/9 [00:00<00:00, 20.16it/s][A
+rtf_avg: 0.033: 100%|[34m██████████[0m| 9/9 [00:00<00:00, 20.16it/s]                                                                                          [Artf_avg: 0.033: 100%|[34m██████████[0m| 9/9 [00:00<00:00, 20.14it/s]
+
+  0%|[34m          [0m| 0/11 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 11/11 [00:00<00:00, 23.11it/s][A
+{'load_data': '0.000', 'extract_feat': '0.010', 'forward': '0.476', 'batch_size': '1', 'rtf': '0.029'}, : 100%|[34m██████████[0m| 11/11 [00:00<00:00, 23.11it/s][A
+rtf_avg: 0.029: 100%|[34m██████████[0m| 11/11 [00:00<00:00, 23.11it/s]                                                                                          [Artf_avg: 0.029: 100%|[34m██████████[0m| 11/11 [00:00<00:00, 23.09it/s]
+
+  0%|[34m          [0m| 0/17 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 17/17 [00:00<00:00, 35.56it/s][A
+{'load_data': '0.000', 'extract_feat': '0.019', 'forward': '0.478', 'batch_size': '1', 'rtf': '0.019'}, : 100%|[34m██████████[0m| 17/17 [00:00<00:00, 35.56it/s][A
+rtf_avg: 0.019: 100%|[34m██████████[0m| 17/17 [00:00<00:00, 35.56it/s]                                                                                          [Artf_avg: 0.019: 100%|[34m██████████[0m| 17/17 [00:00<00:00, 35.54it/s]
+
+  0%|[34m          [0m| 0/24 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 24/24 [00:00<00:00, 50.04it/s][A
+{'load_data': '0.000', 'extract_feat': '0.024', 'forward': '0.480', 'batch_size': '1', 'rtf': '0.013'}, : 100%|[34m██████████[0m| 24/24 [00:00<00:00, 50.04it/s][A
+rtf_avg: 0.013: 100%|[34m██████████[0m| 24/24 [00:00<00:00, 50.04it/s]                                                                                          [Artf_avg: 0.013: 100%|[34m██████████[0m| 24/24 [00:00<00:00, 50.01it/s]
+
+  0%|[34m          [0m| 0/32 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 32/32 [00:00<00:00, 64.38it/s][A
+{'load_data': '0.000', 'extract_feat': '0.033', 'forward': '0.497', 'batch_size': '1', 'rtf': '0.010'}, : 100%|[34m██████████[0m| 32/32 [00:00<00:00, 64.38it/s][A
+rtf_avg: 0.010: 100%|[34m██████████[0m| 32/32 [00:00<00:00, 64.38it/s]                                                                                          [Artf_avg: 0.010: 100%|[34m██████████[0m| 32/32 [00:00<00:00, 64.34it/s]
+
+  0%|[34m          [0m| 0/38 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 38/38 [00:00<00:00, 63.36it/s][A
+{'load_data': '0.000', 'extract_feat': '0.037', 'forward': '0.600', 'batch_size': '1', 'rtf': '0.011'}, : 100%|[34m██████████[0m| 38/38 [00:00<00:00, 63.36it/s][A
+rtf_avg: 0.011: 100%|[34m██████████[0m| 38/38 [00:00<00:00, 63.36it/s]                                                                                          [Artf_avg: 0.011: 100%|[34m██████████[0m| 38/38 [00:00<00:00, 63.33it/s]
+
+  0%|[34m          [0m| 0/43 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 43/43 [00:00<00:00, 68.82it/s][A
+{'load_data': '0.000', 'extract_feat': '0.043', 'forward': '0.625', 'batch_size': '1', 'rtf': '0.010'}, : 100%|[34m██████████[0m| 43/43 [00:00<00:00, 68.82it/s][A
+rtf_avg: 0.010: 100%|[34m██████████[0m| 43/43 [00:00<00:00, 68.82it/s]                                                                                          [Artf_avg: 0.010: 100%|[34m██████████[0m| 43/43 [00:00<00:00, 68.79it/s]
+
+  0%|[34m          [0m| 0/3 [00:00<?, ?it/s][AINFO:root:Attempting to parse hotwords as str...
+INFO:root:Hotword list: ['测试', '语音识别', '<s>'].
+
+100%|[34m██████████[0m| 3/3 [00:03<00:00,  1.26s/it][A
+{'load_data': '0.000', 'extract_feat': '0.055', 'forward': '3.791', 'batch_size': '3', 'rtf': '0.025'}, : 100%|[34m██████████[0m| 3/3 [00:03<00:00,  1.26s/it][A
+rtf_avg: 0.025: 100%|[34m██████████[0m| 3/3 [00:03<00:00,  1.26s/it]                                                                                          [Artf_avg: 0.025: 100%|[34m██████████[0m| 3/3 [00:03<00:00,  1.26s/it]
+
+  0%|[34m          [0m| 0/50 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 50/50 [00:00<00:00, 63.20it/s][A
+{'load_data': '0.000', 'extract_feat': '0.086', 'forward': '0.791', 'batch_size': '1', 'rtf': '0.011'}, : 100%|[34m██████████[0m| 50/50 [00:00<00:00, 63.20it/s][A
+rtf_avg: 0.011: 100%|[34m██████████[0m| 50/50 [00:00<00:00, 63.20it/s]                                                                                          [Artf_avg: 0.011: 100%|[34m██████████[0m| 50/50 [00:00<00:00, 63.17it/s]
+
+  0%|[34m          [0m| 0/71 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 71/71 [00:00<00:00, 92.97it/s][A
+{'load_data': '0.000', 'extract_feat': '0.084', 'forward': '0.764', 'batch_size': '1', 'rtf': '0.007'}, : 100%|[34m██████████[0m| 71/71 [00:00<00:00, 92.97it/s][A
+rtf_avg: 0.007: 100%|[34m██████████[0m| 71/71 [00:00<00:00, 92.97it/s]                                                                                          [Artf_avg: 0.007: 100%|[34m██████████[0m| 71/71 [00:00<00:00, 92.93it/s]
+
+  0%|[34m          [0m| 0/80 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 80/80 [00:00<00:00, 100.05it/s][A
+{'load_data': '0.000', 'extract_feat': '0.103', 'forward': '0.800', 'batch_size': '1', 'rtf': '0.007'}, : 100%|[34m██████████[0m| 80/80 [00:00<00:00, 100.05it/s][A
+rtf_avg: 0.007: 100%|[34m██████████[0m| 80/80 [00:00<00:00, 100.05it/s]                                                                                          [Artf_avg: 0.007: 100%|[34m██████████[0m| 80/80 [00:00<00:00, 99.99it/s] 
+
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 1/1 [00:03<00:00,  3.39s/it][A
+{'load_data': 0.0, 'extract_feat': 0.0, 'forward': '3.393', 'batch_size': '1', 'rtf': '-3.393'}, : 100%|[34m██████████[0m| 1/1 [00:03<00:00,  3.39s/it][A
+rtf_avg: -3.393: 100%|[34m██████████[0m| 1/1 [00:03<00:00,  3.39s/it]                                                                                  [Artf_avg: -3.393: 100%|[34m██████████[0m| 1/1 [00:03<00:00,  3.39s/it]
+100%|[31m██████████[0m| 1/1 [00:19<00:00, 19.21s/it]rtf_avg: 0.064, time_speech:  300.011, time_escape: 19.106: 100%|[31m██████████[0m| 1/1 [00:19<00:00, 19.21s/it]rtf_avg: 0.064, time_speech:  300.011, time_escape: 19.106: 100%|[31m██████████[0m| 1/1 [00:19<00:00, 19.21s/it]
+INFO:asr_service:ASR finished
+INFO:     127.0.0.1:63049 - "POST /api/transcribe HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'asr_service/app.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [85825]
+INFO:     Started server process [88124]
+INFO:     Waiting for application startup.
+INFO:asr_service:Loading FunASR model: paraformer-zh (spk_model=cam++, enabled=True)
+INFO:root:download models from model hub: ms
+WARNING:root:trust_remote_code: False
+INFO:root:Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+INFO:root:ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+INFO:root:scope_map: ['module.', 'None']
+INFO:root:excludes: None
+INFO:root:Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt, status: <All keys matched successfully>
+INFO:root:Building VAD model.
+INFO:root:download models from model hub: ms
+WARNING:root:trust_remote_code: False
+INFO:root:Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+INFO:root:ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+INFO:root:scope_map: ['module.', 'None']
+INFO:root:excludes: None
+INFO:root:Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt, status: <All keys matched successfully>
+INFO:root:Building punc model.
+INFO:root:download models from model hub: ms
+WARNING:root:trust_remote_code: False
+Building prefix dict from the default dictionary ...
+DEBUG:jieba:Building prefix dict from the default dictionary ...
+Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+DEBUG:jieba:Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+Loading model cost 0.474 seconds.
+DEBUG:jieba:Loading model cost 0.474 seconds.
+Prefix dict has been built successfully.
+DEBUG:jieba:Prefix dict has been built successfully.
+WARNING:  WatchFiles detected changes in 'asr_service/app.py'. Reloading...
+INFO:root:Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+INFO:root:ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+INFO:root:scope_map: ['module.', 'None']
+INFO:root:excludes: None
+INFO:root:Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt, status: <All keys matched successfully>
+INFO:root:Building SPK model.
+INFO:root:download models from model hub: ms
+WARNING:root:trust_remote_code: False
+INFO:root:Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+INFO:root:ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+INFO:root:scope_map: ['module.', 'None']
+INFO:root:excludes: None
+INFO:root:Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin, status: <All keys matched successfully>
+INFO:asr_service:Model loaded
+INFO:     Application startup complete.
+2026-02-01 11:44:17,857 - asr_service - INFO - Using device: mps (env=mps)
+INFO:     Started server process [88185]
+INFO:     Waiting for application startup.
+2026-02-01 11:44:17,859 - asr_service - INFO - Loading FunASR model...
+2026-02-01 11:44:17,860 - asr_service - INFO - ASR: paraformer-zh, VAD: fsmn-vad, PUNC: ct-punc, SPK: cam++
+2026-02-01 11:44:22,439 - root - INFO - download models from model hub: ms
+2026-02-01 11:44:23,717 - root - WARNING - trust_remote_code: False
+2026-02-01 11:44:24,822 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+2026-02-01 11:44:24,825 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+2026-02-01 11:44:25,260 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:44:25,260 - root - INFO - excludes: None
+2026-02-01 11:44:25,329 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt, status: <All keys matched successfully>
+2026-02-01 11:44:25,863 - root - INFO - Building VAD model.
+2026-02-01 11:44:25,863 - root - INFO - download models from model hub: ms
+2026-02-01 11:44:26,825 - root - WARNING - trust_remote_code: False
+2026-02-01 11:44:26,833 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+2026-02-01 11:44:26,833 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+2026-02-01 11:44:26,841 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:44:26,841 - root - INFO - excludes: None
+2026-02-01 11:44:26,842 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt, status: <All keys matched successfully>
+2026-02-01 11:44:26,863 - root - INFO - Building punc model.
+2026-02-01 11:44:26,864 - root - INFO - download models from model hub: ms
+2026-02-01 11:44:27,821 - root - WARNING - trust_remote_code: False
+Building prefix dict from the default dictionary ...
+2026-02-01 11:44:30,760 - jieba - DEBUG - Building prefix dict from the default dictionary ...
+Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+2026-02-01 11:44:30,761 - jieba - DEBUG - Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+Loading model cost 0.475 seconds.
+2026-02-01 11:44:31,236 - jieba - DEBUG - Loading model cost 0.475 seconds.
+Prefix dict has been built successfully.
+2026-02-01 11:44:31,236 - jieba - DEBUG - Prefix dict has been built successfully.
+WARNING:  WatchFiles detected changes in 'asr_service/app.py'. Reloading...
+2026-02-01 11:44:44,423 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+2026-02-01 11:44:44,424 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+2026-02-01 11:44:45,700 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:44:45,701 - root - INFO - excludes: None
+2026-02-01 11:44:45,918 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt, status: <All keys matched successfully>
+2026-02-01 11:44:46,226 - root - INFO - Building SPK model.
+2026-02-01 11:44:46,226 - root - INFO - download models from model hub: ms
+2026-02-01 11:44:47,773 - root - WARNING - trust_remote_code: False
+2026-02-01 11:44:47,916 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+2026-02-01 11:44:47,918 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+2026-02-01 11:44:48,015 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:44:48,015 - root - INFO - excludes: None
+2026-02-01 11:44:48,028 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin, status: <All keys matched successfully>
+2026-02-01 11:44:48,313 - asr_service - INFO - Model loaded successfully.
+INFO:     Application startup complete.
+2026-02-01 11:44:48,847 - asr_service - INFO - Using device: mps (env=mps)
+INFO:     Started server process [88299]
+INFO:     Waiting for application startup.
+2026-02-01 11:44:48,849 - asr_service - INFO - Loading FunASR model...
+2026-02-01 11:44:48,849 - asr_service - INFO - ASR: paraformer-zh, VAD: fsmn-vad, PUNC: ct-punc, SPK: cam++
+2026-02-01 11:44:53,111 - root - INFO - download models from model hub: ms
+2026-02-01 11:44:54,089 - root - WARNING - trust_remote_code: False
+2026-02-01 11:44:55,205 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+2026-02-01 11:44:55,208 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+2026-02-01 11:44:55,658 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:44:55,659 - root - INFO - excludes: None
+2026-02-01 11:44:55,745 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt, status: <All keys matched successfully>
+2026-02-01 11:44:56,475 - root - INFO - Building VAD model.
+2026-02-01 11:44:56,475 - root - INFO - download models from model hub: ms
+2026-02-01 11:44:57,509 - root - WARNING - trust_remote_code: False
+2026-02-01 11:44:57,514 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+2026-02-01 11:44:57,515 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+2026-02-01 11:44:57,520 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:44:57,520 - root - INFO - excludes: None
+2026-02-01 11:44:57,521 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt, status: <All keys matched successfully>
+2026-02-01 11:44:57,532 - root - INFO - Building punc model.
+2026-02-01 11:44:57,532 - root - INFO - download models from model hub: ms
+2026-02-01 11:44:58,475 - root - WARNING - trust_remote_code: False
+Building prefix dict from the default dictionary ...
+2026-02-01 11:45:01,638 - jieba - DEBUG - Building prefix dict from the default dictionary ...
+Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+2026-02-01 11:45:01,638 - jieba - DEBUG - Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+Loading model cost 0.479 seconds.
+2026-02-01 11:45:02,117 - jieba - DEBUG - Loading model cost 0.479 seconds.
+Prefix dict has been built successfully.
+2026-02-01 11:45:02,117 - jieba - DEBUG - Prefix dict has been built successfully.
+2026-02-01 11:45:15,294 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+2026-02-01 11:45:15,296 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+2026-02-01 11:45:16,520 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:45:16,520 - root - INFO - excludes: None
+2026-02-01 11:45:16,834 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt, status: <All keys matched successfully>
+2026-02-01 11:45:17,137 - root - INFO - Building SPK model.
+2026-02-01 11:45:17,137 - root - INFO - download models from model hub: ms
+2026-02-01 11:45:17,878 - root - WARNING - trust_remote_code: False
+2026-02-01 11:45:18,023 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+2026-02-01 11:45:18,025 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+2026-02-01 11:45:18,124 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:45:18,125 - root - INFO - excludes: None
+2026-02-01 11:45:18,138 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin, status: <All keys matched successfully>
+2026-02-01 11:45:18,392 - asr_service - INFO - Model loaded successfully.
+INFO:     Application startup complete.
+funasr version: 1.3.0.
+Check update of funasr, and it would cost few times. You may disable it by set `disable_update=True` in AutoModel
+New version is available: 1.3.1.
+Please use the command "pip install -U funasr" to upgrade.
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common
+INFO:     127.0.0.1:63907 - "GET /models HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'asr_service/client_test.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [88299]
+2026-02-01 11:45:28,440 - asr_service - INFO - Using device: mps (env=mps)
+INFO:     Started server process [88673]
+INFO:     Waiting for application startup.
+2026-02-01 11:45:28,443 - asr_service - INFO - Loading FunASR model...
+2026-02-01 11:45:28,443 - asr_service - INFO - ASR: paraformer-zh, VAD: fsmn-vad, PUNC: ct-punc, SPK: cam++
+2026-02-01 11:45:32,762 - root - INFO - download models from model hub: ms
+2026-02-01 11:45:33,793 - root - WARNING - trust_remote_code: False
+2026-02-01 11:45:34,882 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+2026-02-01 11:45:34,885 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt
+2026-02-01 11:45:35,816 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:45:35,819 - root - INFO - excludes: None
+2026-02-01 11:45:36,151 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/model.pt, status: <All keys matched successfully>
+2026-02-01 11:45:36,901 - root - INFO - Building VAD model.
+2026-02-01 11:45:36,901 - root - INFO - download models from model hub: ms
+2026-02-01 11:45:37,836 - root - WARNING - trust_remote_code: False
+2026-02-01 11:45:37,842 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+2026-02-01 11:45:37,842 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+2026-02-01 11:45:37,849 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:45:37,849 - root - INFO - excludes: None
+2026-02-01 11:45:37,850 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt, status: <All keys matched successfully>
+2026-02-01 11:45:37,865 - root - INFO - Building punc model.
+2026-02-01 11:45:37,865 - root - INFO - download models from model hub: ms
+2026-02-01 11:45:38,911 - root - WARNING - trust_remote_code: False
+Building prefix dict from the default dictionary ...
+2026-02-01 11:45:41,814 - jieba - DEBUG - Building prefix dict from the default dictionary ...
+Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+2026-02-01 11:45:41,814 - jieba - DEBUG - Loading model from cache /var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/jieba.cache
+Loading model cost 0.467 seconds.
+2026-02-01 11:45:42,281 - jieba - DEBUG - Loading model cost 0.467 seconds.
+Prefix dict has been built successfully.
+2026-02-01 11:45:42,281 - jieba - DEBUG - Prefix dict has been built successfully.
+2026-02-01 11:45:55,464 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+2026-02-01 11:45:55,465 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt
+2026-02-01 11:45:56,810 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:45:56,810 - root - INFO - excludes: None
+2026-02-01 11:45:57,063 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large/model.pt, status: <All keys matched successfully>
+2026-02-01 11:45:57,394 - root - INFO - Building SPK model.
+2026-02-01 11:45:57,394 - root - INFO - download models from model hub: ms
+2026-02-01 11:45:58,501 - root - WARNING - trust_remote_code: False
+2026-02-01 11:45:58,627 - root - INFO - Loading pretrained params from /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+2026-02-01 11:45:58,630 - root - INFO - ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin
+2026-02-01 11:45:58,733 - root - INFO - scope_map: ['module.', 'None']
+2026-02-01 11:45:58,733 - root - INFO - excludes: None
+2026-02-01 11:45:58,748 - root - INFO - Loading ckpt: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common/campplus_cn_common.bin, status: <All keys matched successfully>
+2026-02-01 11:45:58,993 - asr_service - INFO - Model loaded successfully.
+INFO:     Application startup complete.
+funasr version: 1.3.0.
+Check update of funasr, and it would cost few times. You may disable it by set `disable_update=True` in AutoModel
+New version is available: 1.3.1.
+Please use the command "pip install -U funasr" to upgrade.
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/punc_ct-transformer_cn-en-common-vocab471067-large
+Downloading Model from https://www.modelscope.cn to directory: /Users/pipilu/.cache/modelscope/hub/models/iic/speech_campplus_sv_zh-cn_16k-common
+INFO:     127.0.0.1:63945 - "GET /models HTTP/1.1" 200 OK
+2026-02-01 11:46:00,925 - asr_service - INFO - Processing params: {'input': '/var/folders/td/ss7bh0n15_v2vxx545clnglm0000gn/T/asr_upload_f3cigtw7/audio.wav', 'batch_size_s': 300, 'merge_vad': True, 'merge_length_s': 15}, use_itn=True
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s]100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.07it/s]{'load_data': '0.105', 'extract_feat': '0.803', 'forward': '0.930', 'batch_size': '1', 'rtf': '31.009'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.07it/s]rtf_avg: 31.009: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.07it/s]                                                                                          rtf_avg: 31.009: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.07it/s]
+  0%|[31m          [0m| 0/1 [00:00<?, ?it/s]
+  0%|[34m          [0m| 0/12 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 12/12 [00:04<00:00,  2.79it/s][A
+{'load_data': '0.000', 'extract_feat': '0.073', 'forward': '4.308', 'batch_size': '12', 'rtf': '0.037'}, : 100%|[34m██████████[0m| 12/12 [00:04<00:00,  2.79it/s][A
+rtf_avg: 0.037: 100%|[34m██████████[0m| 12/12 [00:04<00:00,  2.79it/s]                                                                                           [Artf_avg: 0.037: 100%|[34m██████████[0m| 12/12 [00:04<00:00,  2.78it/s]
+
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.93it/s][A
+{'load_data': '0.000', 'extract_feat': '0.003', 'forward': '0.517', 'batch_size': '1', 'rtf': '0.345'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.93it/s][A
+rtf_avg: 0.345: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.93it/s]                                                                                          [Artf_avg: 0.345: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.93it/s]
+
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 1/1 [00:00<00:00,  7.64it/s][A
+{'load_data': '0.000', 'extract_feat': '0.003', 'forward': '0.131', 'batch_size': '1', 'rtf': '0.087'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  7.64it/s][A
+rtf_avg: 0.087: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  7.64it/s]                                                                                          [Artf_avg: 0.087: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  7.61it/s]
+
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 1/1 [00:00<00:00,  7.37it/s][A
+{'load_data': '0.000', 'extract_feat': '0.002', 'forward': '0.136', 'batch_size': '1', 'rtf': '0.090'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  7.37it/s][A
+rtf_avg: 0.090: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  7.37it/s]                                                                                          [Artf_avg: 0.090: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  7.36it/s]
+
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 1/1 [00:00<00:00,  5.13it/s][A
+{'load_data': '0.000', 'extract_feat': '0.003', 'forward': '0.195', 'batch_size': '1', 'rtf': '0.130'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  5.13it/s][A
+rtf_avg: 0.130: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  5.13it/s]                                                                                          [Artf_avg: 0.130: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  5.10it/s]
+
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 1/1 [00:00<00:00,  6.32it/s][A
+{'load_data': '0.000', 'extract_feat': '0.003', 'forward': '0.158', 'batch_size': '1', 'rtf': '0.105'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  6.32it/s][A
+rtf_avg: 0.105: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  6.32it/s]                                                                                          [Artf_avg: 0.105: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  6.31it/s]
+
+  0%|[34m          [0m| 0/7 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 7/7 [00:00<00:00, 13.57it/s][A
+{'load_data': '0.000', 'extract_feat': '0.012', 'forward': '0.516', 'batch_size': '1', 'rtf': '0.049'}, : 100%|[34m██████████[0m| 7/7 [00:00<00:00, 13.57it/s][A
+rtf_avg: 0.049: 100%|[34m██████████[0m| 7/7 [00:00<00:00, 13.57it/s]                                                                                          [Artf_avg: 0.049: 100%|[34m██████████[0m| 7/7 [00:00<00:00, 13.56it/s]
+
+  0%|[34m          [0m| 0/13 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 13/13 [00:00<00:00, 26.07it/s][A
+{'load_data': '0.000', 'extract_feat': '0.015', 'forward': '0.499', 'batch_size': '1', 'rtf': '0.026'}, : 100%|[34m██████████[0m| 13/13 [00:00<00:00, 26.07it/s][A
+rtf_avg: 0.026: 100%|[34m██████████[0m| 13/13 [00:00<00:00, 26.07it/s]                                                                                          [Artf_avg: 0.026: 100%|[34m██████████[0m| 13/13 [00:00<00:00, 26.06it/s]
+
+  0%|[34m          [0m| 0/14 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 14/14 [00:00<00:00, 25.55it/s][A
+{'load_data': '0.000', 'extract_feat': '0.019', 'forward': '0.548', 'batch_size': '1', 'rtf': '0.026'}, : 100%|[34m██████████[0m| 14/14 [00:00<00:00, 25.55it/s][A
+rtf_avg: 0.026: 100%|[34m██████████[0m| 14/14 [00:00<00:00, 25.55it/s]                                                                                          [Artf_avg: 0.026: 100%|[34m██████████[0m| 14/14 [00:00<00:00, 25.54it/s]
+
+  0%|[34m          [0m| 0/18 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 18/18 [00:00<00:00, 33.61it/s][A
+{'load_data': '0.000', 'extract_feat': '0.023', 'forward': '0.536', 'batch_size': '1', 'rtf': '0.020'}, : 100%|[34m██████████[0m| 18/18 [00:00<00:00, 33.61it/s][A
+rtf_avg: 0.020: 100%|[34m██████████[0m| 18/18 [00:00<00:00, 33.61it/s]                                                                                          [Artf_avg: 0.020: 100%|[34m██████████[0m| 18/18 [00:00<00:00, 33.59it/s]
+
+  0%|[34m          [0m| 0/24 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 24/24 [00:00<00:00, 46.17it/s][A
+{'load_data': '0.000', 'extract_feat': '0.035', 'forward': '0.520', 'batch_size': '1', 'rtf': '0.014'}, : 100%|[34m██████████[0m| 24/24 [00:00<00:00, 46.17it/s][A
+rtf_avg: 0.014: 100%|[34m██████████[0m| 24/24 [00:00<00:00, 46.17it/s]                                                                                          [Artf_avg: 0.014: 100%|[34m██████████[0m| 24/24 [00:00<00:00, 46.14it/s]
+
+  0%|[34m          [0m| 0/32 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 32/32 [00:00<00:00, 53.91it/s][A
+{'load_data': '0.000', 'extract_feat': '0.041', 'forward': '0.594', 'batch_size': '1', 'rtf': '0.012'}, : 100%|[34m██████████[0m| 32/32 [00:00<00:00, 53.91it/s][A
+rtf_avg: 0.012: 100%|[34m██████████[0m| 32/32 [00:00<00:00, 53.91it/s]                                                                                          [Artf_avg: 0.012: 100%|[34m██████████[0m| 32/32 [00:00<00:00, 53.88it/s]
+
+  0%|[34m          [0m| 0/38 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 38/38 [00:00<00:00, 62.06it/s][A
+{'load_data': '0.000', 'extract_feat': '0.044', 'forward': '0.612', 'batch_size': '1', 'rtf': '0.011'}, : 100%|[34m██████████[0m| 38/38 [00:00<00:00, 62.06it/s][A
+rtf_avg: 0.011: 100%|[34m██████████[0m| 38/38 [00:00<00:00, 62.06it/s]                                                                                          [Artf_avg: 0.011: 100%|[34m██████████[0m| 38/38 [00:00<00:00, 62.03it/s]
+
+  0%|[34m          [0m| 0/4 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 4/4 [00:03<00:00,  1.22it/s][A
+{'load_data': '0.000', 'extract_feat': '0.064', 'forward': '3.278', 'batch_size': '4', 'rtf': '0.018'}, : 100%|[34m██████████[0m| 4/4 [00:03<00:00,  1.22it/s][A
+rtf_avg: 0.018: 100%|[34m██████████[0m| 4/4 [00:03<00:00,  1.22it/s]                                                                                          [Artf_avg: 0.018: 100%|[34m██████████[0m| 4/4 [00:03<00:00,  1.22it/s]
+
+  0%|[34m          [0m| 0/43 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 43/43 [00:00<00:00, 56.16it/s][A
+{'load_data': '0.000', 'extract_feat': '0.079', 'forward': '0.766', 'batch_size': '1', 'rtf': '0.012'}, : 100%|[34m██████████[0m| 43/43 [00:00<00:00, 56.16it/s][A
+rtf_avg: 0.012: 100%|[34m██████████[0m| 43/43 [00:00<00:00, 56.16it/s]                                                                                          [Artf_avg: 0.012: 100%|[34m██████████[0m| 43/43 [00:00<00:00, 56.12it/s]
+
+  0%|[34m          [0m| 0/50 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 50/50 [00:00<00:00, 63.30it/s][A
+{'load_data': '0.000', 'extract_feat': '0.090', 'forward': '0.790', 'batch_size': '1', 'rtf': '0.011'}, : 100%|[34m██████████[0m| 50/50 [00:00<00:00, 63.30it/s][A
+rtf_avg: 0.011: 100%|[34m██████████[0m| 50/50 [00:00<00:00, 63.30it/s]                                                                                          [Artf_avg: 0.011: 100%|[34m██████████[0m| 50/50 [00:00<00:00, 61.69it/s]
+
+  0%|[34m          [0m| 0/71 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 71/71 [00:00<00:00, 87.23it/s][A
+{'load_data': '0.000', 'extract_feat': '0.087', 'forward': '0.814', 'batch_size': '1', 'rtf': '0.008'}, : 100%|[34m██████████[0m| 71/71 [00:00<00:00, 87.23it/s][A
+rtf_avg: 0.008: 100%|[34m██████████[0m| 71/71 [00:00<00:00, 87.23it/s]                                                                                          [Artf_avg: 0.008: 100%|[34m██████████[0m| 71/71 [00:00<00:00, 87.19it/s]
+
+  0%|[34m          [0m| 0/80 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 80/80 [00:00<00:00, 102.48it/s][A
+{'load_data': '0.000', 'extract_feat': '0.112', 'forward': '0.781', 'batch_size': '1', 'rtf': '0.007'}, : 100%|[34m██████████[0m| 80/80 [00:00<00:00, 102.48it/s][A
+rtf_avg: 0.007: 100%|[34m██████████[0m| 80/80 [00:00<00:00, 102.48it/s]                                                                                          [Artf_avg: 0.007: 100%|[34m██████████[0m| 80/80 [00:00<00:00, 102.44it/s]
+
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s][A
+100%|[34m██████████[0m| 1/1 [00:03<00:00,  3.53s/it][A
+{'load_data': 0.0, 'extract_feat': 0.0, 'forward': '3.527', 'batch_size': '1', 'rtf': '-3.527'}, : 100%|[34m██████████[0m| 1/1 [00:03<00:00,  3.53s/it][A
+rtf_avg: -3.527: 100%|[34m██████████[0m| 1/1 [00:03<00:00,  3.53s/it]                                                                                  [Artf_avg: -3.527: 100%|[34m██████████[0m| 1/1 [00:03<00:00,  3.53s/it]
+100%|[31m██████████[0m| 1/1 [00:19<00:00, 19.66s/it]rtf_avg: 0.065, time_speech:  300.011, time_escape: 19.513: 100%|[31m██████████[0m| 1/1 [00:19<00:00, 19.66s/it]rtf_avg: 0.065, time_speech:  300.011, time_escape: 19.513: 100%|[31m██████████[0m| 1/1 [00:19<00:00, 19.66s/it]
+INFO:     127.0.0.1:63955 - "POST /asr/transcribe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54593 - "GET /index.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54593 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54593 - "GET /sw.js HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [88673]
+INFO:     Stopping reloader process [85794]
+/Users/pipilu/.pyenv/versions/3.12.9/lib/python3.12/multiprocessing/resource_tracker.py:255: UserWarning: resource_tracker: There appear to be 2 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
