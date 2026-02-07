@@ -22,6 +22,30 @@ except ImportError:
 # Import local utils
 from utils import download_audio, run_ffmpeg, postprocess
 
+
+def parse_hotwords(hotword_str: str) -> Optional[str]:
+    """
+    解析热词字符串，支持多种格式：
+    - 逗号分隔: "关联交易,净利润,应收账款"
+    - 空格分隔: "关联交易 净利润 应收账款"
+    - 带权重格式: "关联交易:5 净利润:3 应收账款"
+    
+    返回 FunASR 所需的热词格式（空格分隔）
+    """
+    if not hotword_str or not hotword_str.strip():
+        return None
+    
+    # 统一分隔符：逗号替换为空格
+    normalized = hotword_str.replace(",", " ").replace("，", " ")
+    
+    words = []
+    for item in normalized.split():
+        item = item.strip()
+        if item:
+            words.append(item)
+    
+    return " ".join(words) if words else None
+
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("funasr_service")
@@ -163,12 +187,15 @@ async def get_models():
 async def transcribe(
     file: Optional[UploadFile] = File(None, description="Audio file to upload (wav, mp3, etc.)"),
     audio_url: Optional[str] = Form(None, description="URL of the audio file to download"),
-    hotword: Annotated[str, Form(description="Comma-separated hotwords for boosting")] = "",
+    hotword: Annotated[str, Form(description="热词，逗号或空格分隔，支持权重格式如 '关联交易:5 净利润:3'")] = "",
     use_itn: bool = Form(True, description="Enable Inverse Text Normalization (convert numbers to digits, etc.)"),
     merge_vad: bool = Form(True, description="Merge VAD segments"),
-    merge_length_s: int = Form(15, description="Merge length in seconds"),
-    batch_size_s: int = Form(300, description="Batch size in seconds"),
+    merge_length_s: int = Form(8, description="VAD 合并窗口（秒），会议场景建议 5-10"),
+    batch_size_s: int = Form(600, description="批处理窗口（秒），长音频建议 600"),
     language: str = Form("auto", description="Language code"),
+    # 会议场景优化参数
+    spk_thresh: float = Form(0.7, description="说话人分离阈值 (0.5-0.9)，会议场景建议 0.65-0.75"),
+    sentence_timestamp: bool = Form(True, description="输出句子级时间戳"),
 ):
     """
     Transcribe an audio file or URL.
@@ -219,19 +246,23 @@ async def transcribe(
         # 3. Prepare options
         start_time_ms = 0 # Base offset if we were slicing, here it's 0
         
-        hotword_list = [w.strip() for w in hotword.split(",") if w.strip()] if hotword else None
-        hotword_str = " ".join(hotword_list) if hotword_list else None
+        # 解析热词（支持逗号/空格分隔，支持权重格式 "词:权重"）
+        hotword_str = parse_hotwords(hotword) if hotword else None
         
         generate_kwargs = {
             "input": str(audio_wav_path),
             "batch_size_s": batch_size_s,
             "merge_vad": merge_vad,
             "merge_length_s": merge_length_s,
+            "sentence_timestamp": sentence_timestamp,
         }
         if hotword_str:
             generate_kwargs["hotword"] = hotword_str
         if language != "auto":
             generate_kwargs["language"] = language
+        # 说话人分离参数
+        if ENABLE_SPK:
+            generate_kwargs["spk_thresh"] = spk_thresh
             
         # 4. Run ASR
         # Run in thread pool to avoid blocking event loop

@@ -146,6 +146,10 @@ async def download_audio(url: str, save_path: Path):
                     f.write(chunk)
 
 async def run_ffmpeg(input_path: Path, output_path: Path, enable_denoise: bool = True) -> None:
+    """
+    音频预处理：转换为 16kHz 单声道 WAV
+    会议场景优化：增强降噪 + 动态压缩（均衡不同说话人音量）
+    """
     command = [
         "ffmpeg", "-nostdin", "-y",
         "-i", str(input_path),
@@ -154,7 +158,20 @@ async def run_ffmpeg(input_path: Path, output_path: Path, enable_denoise: bool =
     ]
     
     if enable_denoise:
-        command.extend(["-af", "highpass=f=80,lowpass=f=8000,afftdn=nf=-20"])
+        # 会议场景优化的音频滤波链：
+        # 1. highpass=f=80: 去除低频噪音（空调、电脑风扇）
+        # 2. lowpass=f=8000: 去除高频噪音，保留人声主要频段
+        # 3. afftdn=nf=-25: 自适应 FFT 降噪，更强降噪效果
+        # 4. compand: 动态压缩，均衡不同说话人的音量差异
+        # 5. loudnorm: 响度归一化，确保整体音量一致
+        af_filter = (
+            "highpass=f=80,"
+            "lowpass=f=8000,"
+            "afftdn=nf=-25,"
+            "compand=attacks=0.3:decays=0.8:points=-80/-80|-45/-30|-20/-20:gain=5,"
+            "loudnorm=I=-16:LRA=11:TP=-1.5"
+        )
+        command.extend(["-af", af_filter])
     
     command.extend(["-f", "wav", str(output_path)])
     
