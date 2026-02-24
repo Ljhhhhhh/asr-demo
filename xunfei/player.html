@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>音频播放器 · 实时字幕</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0e1a;
+        --surface: #131829;
+        --surface-hover: #1a2038;
+        --border: rgba(255, 255, 255, 0.06);
+        --text: #e4e7f0;
+        --text-dim: #6b7294;
+        --accent: #6c5ce7;
+        --accent-glow: rgba(108, 92, 231, 0.25);
+        --active: #a29bfe;
+        --speaker: #00cec9;
+        --radius: 16px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 32px;
+        background: linear-gradient(135deg, var(--active), var(--speaker));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.02em;
+      }
+
+      /* ---- Player Card ---- */
+      .player-card {
+        width: 100%;
+        max-width: 760px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 28px 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+        position: sticky;
+        top: 20px;
+        z-index: 10;
+      }
+
+      .file-label {
+        font-size: 0.8rem;
+        color: var(--text-dim);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .file-label svg {
+        width: 16px;
+        height: 16px;
+        fill: var(--text-dim);
+      }
+
+      /* ---- Waveform / Progress ---- */
+      .progress-container {
+        position: relative;
+        height: 48px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 10px;
+        cursor: pointer;
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+      .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--active));
+        width: 0%;
+        border-radius: 10px;
+        transition: width 0.3s linear;
+        position: relative;
+      }
+      .progress-bar::after {
+        content: '';
+        position: absolute;
+        right: -2px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 24px;
+        background: #fff;
+        border-radius: 2px;
+        box-shadow: 0 0 10px var(--accent-glow);
+      }
+      .time-display {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.75rem;
+        color: var(--text-dim);
+        font-variant-numeric: tabular-nums;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      /* ---- Controls ---- */
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s ease;
+      }
+      .btn:hover {
+        color: var(--active);
+        transform: scale(1.1);
+      }
+
+      .btn-play {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), #7c5ce7);
+        color: #fff;
+        box-shadow: 0 4px 20px var(--accent-glow);
+      }
+      .btn-play:hover {
+        background: linear-gradient(135deg, #7c6cf7, var(--active));
+        transform: scale(1.08);
+      }
+      .btn-play svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .btn-skip svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .speed-btn {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text-dim);
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        font-family: inherit;
+      }
+      .speed-btn:hover,
+      .speed-btn.active {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .volume-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+      }
+      .volume-group svg {
+        width: 18px;
+        height: 18px;
+        fill: var(--text-dim);
+      }
+      .volume-slider {
+        -webkit-appearance: none;
+        width: 80px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        outline: none;
+      }
+      .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 14px;
+        height: 14px;
+        background: var(--active);
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      /* ---- Subtitle Panel ---- */
+      .subtitle-panel {
+        width: 100%;
+        max-width: 760px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 8px 0;
+        max-height: 60vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        scroll-behavior: smooth;
+      }
+      .subtitle-panel::-webkit-scrollbar {
+        width: 6px;
+      }
+      .subtitle-panel::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .subtitle-panel::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 3px;
+      }
+
+      .seg {
+        padding: 12px 28px;
+        cursor: pointer;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        border-radius: 8px;
+        margin: 2px 8px;
+        transition: all 0.2s ease;
+      }
+      .seg:hover {
+        background: var(--surface-hover);
+      }
+      .seg.active {
+        background: rgba(108, 92, 231, 0.1);
+        border-left: 3px solid var(--accent);
+        margin-left: 5px;
+      }
+      .seg.active .seg-text {
+        color: #fff;
+      }
+
+      .seg-time {
+        font-size: 0.7rem;
+        color: var(--text-dim);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        padding-top: 3px;
+        min-width: 60px;
+        flex-shrink: 0;
+      }
+      .seg-speaker {
+        font-size: 0.7rem;
+        color: var(--speaker);
+        font-weight: 600;
+        padding: 2px 8px;
+        background: rgba(0, 206, 201, 0.1);
+        border-radius: 4px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .seg-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: var(--text-dim);
+        transition: color 0.2s ease;
+      }
+
+      /* ---- File Drop Zone ---- */
+      .drop-zone {
+        width: 100%;
+        max-width: 760px;
+        border: 2px dashed rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        padding: 60px 20px;
+        text-align: center;
+        color: var(--text-dim);
+        margin-bottom: 24px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+      .drop-zone:hover,
+      .drop-zone.dragover {
+        border-color: var(--accent);
+        background: rgba(108, 92, 231, 0.05);
+      }
+      .drop-zone h2 {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        color: var(--text);
+      }
+      .drop-zone p {
+        font-size: 0.8rem;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      /* ---- Current Subtitle Overlay ---- */
+      .current-subtitle {
+        width: 100%;
+        max-width: 760px;
+        text-align: center;
+        padding: 16px 24px;
+        margin-bottom: 16px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #fff;
+        min-height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(108, 92, 231, 0.08);
+        border-radius: 12px;
+        border: 1px solid rgba(108, 92, 231, 0.15);
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎧 音频播放器 · 实时字幕</h1>
+
+    <!-- Drop Zone -->
+    <div class="drop-zone" id="dropZone">
+      <h2>拖放音频和字幕文件到这里</h2>
+      <p>支持 .m4a .mp3 .wav .flac 音频 + _transcript.txt 字幕文件</p>
+      <p style="margin-top: 12px; font-size: 0.75rem">或点击选择文件</p>
+      <input
+        type="file"
+        id="fileInput"
+        multiple
+        accept=".m4a,.mp3,.wav,.flac,.opus,.txt"
+        style="display: none"
+      />
+    </div>
+
+    <!-- Player -->
+    <div class="player-card hidden" id="playerCard">
+      <div class="file-label" id="fileLabel">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M12 3v10.55c-.59-.34-1.27-.55-2-.55C7.79 13 6 14.79 6 17s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"
+          />
+        </svg>
+        <span>未加载音频</span>
+      </div>
+
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="time-display" id="timeDisplay">00:00 / 00:00</div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-skip" id="btnBack" title="后退10秒">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"
+            />
+            <text
+              x="10"
+              y="16"
+              font-size="7"
+              text-anchor="middle"
+              font-weight="700"
+            >
+              10
+            </text>
+          </svg>
+        </button>
+        <button class="btn btn-play" id="btnPlay">
+          <svg id="iconPlay" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          <svg
+            id="iconPause"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="hidden"
+          >
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+          </svg>
+        </button>
+        <button class="btn btn-skip" id="btnForward" title="快进10秒">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"
+            />
+            <text
+              x="14"
+              y="16"
+              font-size="7"
+              text-anchor="middle"
+              font-weight="700"
+            >
+              10
+            </text>
+          </svg>
+        </button>
+
+        <button class="speed-btn active" data-speed="1">1x</button>
+        <button class="speed-btn" data-speed="1.25">1.25x</button>
+        <button class="speed-btn" data-speed="1.5">1.5x</button>
+        <button class="speed-btn" data-speed="2">2x</button>
+
+        <div class="volume-group">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.77v6.46A4.48 4.48 0 0016.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
+            />
+          </svg>
+          <input
+            type="range"
+            class="volume-slider"
+            id="volumeSlider"
+            min="0"
+            max="1"
+            step="0.05"
+            value="1"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Current subtitle highlight -->
+    <div class="current-subtitle hidden" id="currentSubtitle">-</div>
+
+    <!-- Subtitle list -->
+    <div class="subtitle-panel hidden" id="subtitlePanel"></div>
+
+    <audio id="audio" preload="auto"></audio>
+
+    <script>
+      const audio = document.getElementById('audio');
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const playerCard = document.getElementById('playerCard');
+      const fileLabel = document
+        .getElementById('fileLabel')
+        .querySelector('span');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const timeDisplay = document.getElementById('timeDisplay');
+      const btnPlay = document.getElementById('btnPlay');
+      const iconPlay = document.getElementById('iconPlay');
+      const iconPause = document.getElementById('iconPause');
+      const btnBack = document.getElementById('btnBack');
+      const btnForward = document.getElementById('btnForward');
+      const volumeSlider = document.getElementById('volumeSlider');
+      const subtitlePanel = document.getElementById('subtitlePanel');
+      const currentSubtitle = document.getElementById('currentSubtitle');
+
+      let segments = [];
+      let activeIndex = -1;
+
+      // ---- Parse transcript ----
+      function parseTranscript(text) {
+        const lines = text.trim().split('\n');
+        const segs = [];
+        const re =
+          /^\[(\d{2}:\d{2}:\d{2})\s*-\s*(\d{2}:\d{2}:\d{2})\]\s*(?:【(.+?)】)?\s*(.*)/;
+        for (const line of lines) {
+          const m = line.match(re);
+          if (!m) continue;
+          segs.push({
+            begin: timeToSec(m[1]),
+            end: timeToSec(m[2]),
+            speaker: m[3] || '',
+            text: m[4],
+          });
+        }
+        return segs;
+      }
+
+      function timeToSec(ts) {
+        const [h, m, s] = ts.split(':').map(Number);
+        return h * 3600 + m * 60 + s;
+      }
+
+      function formatTime(sec) {
+        const h = Math.floor(sec / 3600);
+        const m = Math.floor((sec % 3600) / 60);
+        const s = Math.floor(sec % 60);
+        if (h > 0)
+          return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }
+
+      // ---- Render segments ----
+      function renderSegments() {
+        subtitlePanel.innerHTML = '';
+        segments.forEach((seg, i) => {
+          const el = document.createElement('div');
+          el.className = 'seg';
+          el.dataset.index = i;
+          el.innerHTML = `
+      <span class="seg-time">${formatTime(seg.begin)}</span>
+      ${seg.speaker ? `<span class="seg-speaker">${seg.speaker}</span>` : ''}
+      <span class="seg-text">${seg.text}</span>
+    `;
+          el.addEventListener('click', () => {
+            audio.currentTime = seg.begin;
+            if (audio.paused) audio.play();
+          });
+          subtitlePanel.appendChild(el);
+        });
+      }
+
+      // ---- Sync highlight ----
+      function syncSubtitle() {
+        const t = audio.currentTime;
+        let idx = -1;
+        for (let i = 0; i < segments.length; i++) {
+          if (t >= segments[i].begin && t < segments[i].end) {
+            idx = i;
+            break;
+          }
+        }
+        if (idx === activeIndex) return;
+        activeIndex = idx;
+
+        document
+          .querySelectorAll('.seg.active')
+          .forEach((el) => el.classList.remove('active'));
+        if (idx >= 0) {
+          const el = subtitlePanel.children[idx];
+          if (el) {
+            el.classList.add('active');
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          currentSubtitle.textContent = segments[idx].text;
+        } else {
+          currentSubtitle.textContent = '';
+        }
+      }
+
+      // ---- File loading ----
+      function loadFiles(files) {
+        for (const f of files) {
+          if (
+            f.type.startsWith('audio/') ||
+            /\.(m4a|mp3|wav|flac|opus)$/i.test(f.name)
+          ) {
+            audio.src = URL.createObjectURL(f);
+            fileLabel.textContent = f.name;
+            playerCard.classList.remove('hidden');
+          }
+          if (f.name.endsWith('.txt')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              segments = parseTranscript(e.target.result);
+              renderSegments();
+              subtitlePanel.classList.remove('hidden');
+              currentSubtitle.classList.remove('hidden');
+            };
+            reader.readAsText(f);
+          }
+        }
+        dropZone.classList.add('hidden');
+      }
+
+      dropZone.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', (e) => loadFiles(e.target.files));
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+      dropZone.addEventListener('dragleave', () =>
+        dropZone.classList.remove('dragover'),
+      );
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        loadFiles(e.dataTransfer.files);
+      });
+
+      // ---- Controls ----
+      btnPlay.addEventListener('click', () => {
+        if (audio.paused) audio.play();
+        else audio.pause();
+      });
+      audio.addEventListener('play', () => {
+        iconPlay.classList.add('hidden');
+        iconPause.classList.remove('hidden');
+      });
+      audio.addEventListener('pause', () => {
+        iconPause.classList.add('hidden');
+        iconPlay.classList.remove('hidden');
+      });
+
+      btnBack.addEventListener('click', () => {
+        audio.currentTime = Math.max(0, audio.currentTime - 10);
+      });
+      btnForward.addEventListener('click', () => {
+        audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+      });
+
+      volumeSlider.addEventListener('input', (e) => {
+        audio.volume = e.target.value;
+      });
+
+      document.querySelectorAll('.speed-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          document
+            .querySelectorAll('.speed-btn')
+            .forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          audio.playbackRate = parseFloat(btn.dataset.speed);
+        });
+      });
+
+      // ---- Progress ----
+      audio.addEventListener('timeupdate', () => {
+        if (!audio.duration) return;
+        const pct = (audio.currentTime / audio.duration) * 100;
+        progressBar.style.width = pct + '%';
+        timeDisplay.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+        syncSubtitle();
+      });
+
+      progressContainer.addEventListener('click', (e) => {
+        const rect = progressContainer.getBoundingClientRect();
+        const pct = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = pct * audio.duration;
+      });
+
+      // ---- Keyboard shortcuts ----
+      document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          btnPlay.click();
+        }
+        if (e.code === 'ArrowLeft') {
+          audio.currentTime = Math.max(0, audio.currentTime - 5);
+        }
+        if (e.code === 'ArrowRight') {
+          audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+        }
+      });
+    </script>
+  </body>
+</html>
